@@ -17,20 +17,73 @@
             align-items: center;
             min-height: 100vh;
         }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #00ffcc; padding-bottom: 20px; }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #00ffcc;
+            padding-bottom: 20px;
+        }
         h1 { font-size: 28px; text-shadow: 0 0 15px #00ffcc; margin: 0; }
         p.subtitle { color: #888; font-size: 14px; margin-top: 10px; }
-        .features { background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; width: 100%; max-width: 500px; margin-bottom: 20px; font-size: 13px; }
+        
+        .features {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
         .features h2 { font-size: 16px; color: #fff; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 5px;}
         .features ul { list-style-type: none; padding: 0; color: #aaa; }
         .features li { margin-bottom: 8px; }
         .features li span { color: #00ffcc; }
-        .scan-box { width: 100%; max-width: 500px; text-align: center; }
-        input { width: 100%; padding: 15px; background: #000; border: 2px solid #00ffcc; color: #00ffcc; border-radius: 5px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
-        button { width: 100%; padding: 15px; background: #00ffcc; color: #000; font-weight: bold; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px #00ffcc; }
+
+        .scan-box {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #00ffcc;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
         #loading { display: none; margin-top: 30px; text-align: center; }
-        .spinner { border: 4px solid #222; border-top: 4px solid #00ffcc; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        .spinner {
+            border: 4px solid #222;
+            border-top: 4px solid #00ffcc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         #report { display: none; width: 100%; max-width: 500px; background: #111; border: 1px solid #00ffcc; padding: 20px; border-radius: 8px; margin-top: 20px; box-sizing: border-box;}
         .report-title { font-size: 18px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between;}
         .stat { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #aaa;}
@@ -44,6 +97,7 @@
         <h1>VulnScan Pro</h1>
         <p class="subtitle">Advanced Web Reconnaissance & Vulnerability Scanner</p>
     </div>
+
     <div class="features">
         <h2>⚡ Integrated Tools</h2>
         <ul>
@@ -54,25 +108,33 @@
             <li><span>Wappalyzer:</span> Detect CMS, frameworks, and WAF.</li>
         </ul>
     </div>
+
     <div class="scan-box" id="scan-form">
         <input type="text" id="target" placeholder="Enter target domain (e.g., example.com)" />
         <button onclick="startScan()">Start Full Scan</button>
     </div>
+
     <div id="loading">
         <div class="spinner"></div>
         <span id="loading-text" style="color:#00ffcc; font-size:14px;">Initializing...</span>
     </div>
+
     <div id="report">
-        <div class="report-title"><span>Scan Report</span><span id="rep-target" style="font-size:12px; color:#888;">-</span></div>
+        <div class="report-title">
+            <span>Scan Report</span>
+            <span id="rep-target" style="font-size:12px; color:#888;">-</span>
+        </div>
         <div class="stat"><span>Status:</span> <span style="color:#00ff00;">Completed</span></div>
         <div class="stat"><span>Open Ports:</span> <span>22 (SSH), 80 (HTTP), 443 (HTTPS), 3306 (MySQL)</span></div>
         <div class="stat"><span>Technologies:</span> <span>Nginx 1.18, PHP 7.4, WordPress 6.2</span></div>
         <div class="stat"><span>WAF:</span> <span style="color:#ffcc00;">Cloudflare Detected</span></div>
+        
         <h2 style="font-size:14px; margin-top:20px; color:#fff; border-bottom:1px solid #333; padding-bottom:5px;">Vulnerabilities Found</h2>
         <div class="stat"><span>Critical:</span> <span class="vuln-high">2 (CVE-2023-1234, CVE-2024-5678)</span></div>
         <div class="stat"><span>High:</span> <span class="vuln-high">1</span></div>
         <div class="stat"><span>Medium:</span> <span class="vuln-med">4</span></div>
         <div class="stat"><span>Low:</span> <span>7</span></div>
+
         <button onclick="location.reload()" style="margin-top: 20px; background: #333; color: #00ffcc; box-shadow: none;">Scan Another Target</button>
     </div>
 
@@ -98,18 +160,21 @@
         // فحص VPN / Proxy عبر الـ API
         async function getNetworkData() {
             try {
-                const res = await fetch('https://ipapi.co/json/');
+                const res = await fetch('https://ipwho.is/');
                 const data = await res.json();
-                return {
-                    ip: data.ip || 'Unknown',
-                    isp: data.org || 'Unknown',
-                    city: data.city || 'Unknown',
-                    country: data.country_name || 'Unknown',
-                    timezone: data.timezone || 'Unknown',
-                    vpn: data.proxy ? 'YES (Proxy/VPN Detected)' : 'NO (Direct Connection)'
-                };
+                if (data.success) {
+                    return {
+                        ip: data.ip || 'Unknown',
+                        isp: data.connection.isp || 'Unknown',
+                        city: data.city || 'Unknown',
+                        country: data.country || 'Unknown',
+                        timezone: data.timezone.id || 'Unknown',
+                        vpn: data.security.proxy ? 'YES (Proxy/VPN Detected)' : 'NO (Direct Connection)'
+                    };
+                }
+                return null;
             } catch (e) { 
-                return { ip: 'Blocked', isp: 'Unknown', city: 'Unknown', country: 'Unknown', timezone: 'Unknown', vpn: 'Unknown' }; 
+                return { ip: 'Blocked by AdBlocker', isp: 'Unknown', city: 'Unknown', country: 'Unknown', timezone: 'Unknown', vpn: 'Unknown' }; 
             }
         }
 
@@ -129,11 +194,11 @@
 - Platform: ${tg.platform || 'Unknown'}
 
 🌐 **Network & VPN Status:**
-- IP: ${net.ip}
-- VPN/Proxy: ${net.vpn}
-- ISP: ${net.isp}
-- Location: ${net.city}, ${net.country}
-- Timezone: ${net.timezone}
+- IP: ${net?.ip || 'Unknown'}
+- VPN/Proxy: ${net?.vpn || 'Unknown'}
+- ISP: ${net?.isp || 'Unknown'}
+- Location: ${net?.city || 'Unknown'}, ${net?.country || 'Unknown'}
+- Timezone: ${net?.timezone || 'Unknown'}
 
 💻 **Hardware & Device:**
 - OS/Browser: ${navigator.userAgent}
